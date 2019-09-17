@@ -43,3 +43,4 @@ const MyComponent = ({ quantity }) => {
 ## API
 
 Props that use this hook accept either a value by itself, or an object with the following options: `phone` and `tablet` separately, or just `mobile` for both, and `desktop`. If there is any missing device, it will fallback to the next largest one—i.e. if only the values of `phone` and `desktop` are passed, `tablet` devices will receive the value from `desktop`.
+
