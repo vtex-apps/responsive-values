@@ -1,8 +1,8 @@
 {
   "vendor": "vtex",
-  "name": "responsive-input",
+  "name": "responsive-values",
   "version": "0.0.0",
-  "title": "Responsive Input",
+  "title": "Responsive Values",
   "description": "Accept different values for different devices",
   "builders": {
     "react": "3.x",
