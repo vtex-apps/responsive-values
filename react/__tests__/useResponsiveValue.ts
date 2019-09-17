@@ -183,6 +183,20 @@ describe('useResponsiveValue', () => {
           phone: 1,
         })
       })
+      it('phone and tablet should override mobile', () => {
+        const value = {
+          phone: 1,
+          mobile: 2,
+          tablet: 3,
+          desktop: 4,
+        }
+
+        expect(normalizeResponsiveInput(value)).toStrictEqual({
+          phone: 1,
+          tablet: 3,
+          desktop: 4,
+        })
+      })
     })
   })
 })
