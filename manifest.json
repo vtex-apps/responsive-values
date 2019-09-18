@@ -1,7 +1,7 @@
 {
   "vendor": "vtex",
   "name": "responsive-values",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "title": "Responsive Values",
   "description": "Accept different values for different devices",
   "builders": {
