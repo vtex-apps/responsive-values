@@ -4,7 +4,9 @@
     "test": "vtex-test-tools test"
   },
   "dependencies": {
+    "@types/ramda": "^0.26.21",
     "apollo-client": "^2.6.3",
+    "ramda": "^0.26.1",
     "react": "^16.8.6",
     "react-apollo": "^2.5.8",
     "react-dom": "^16.8.6",
@@ -16,7 +18,7 @@
     "@types/react-intl": "^2.3.18",
     "@vtex/test-tools": "^0.3.2",
     "eslint": "5.x",
-    "eslint-config-vtex-react": "4.x",
+    "eslint-config-vtex-react": "^5.0.1",
     "prettier": "^1.18.2",
     "prop-types": "^15.7.2",
     "typescript": "3.5.2"
