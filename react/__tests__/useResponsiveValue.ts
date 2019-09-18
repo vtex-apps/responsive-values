@@ -1,7 +1,7 @@
 import {
   isResponsiveInput,
   normalizeResponsiveInput,
-} from '../useResponsiveValue'
+} from '../hooks/normalizeResponsiveInput'
 
 console.warn = jest.fn()
 
