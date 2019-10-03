@@ -1,4 +1,4 @@
-const useDevice = () => {
+export const useDevice = () => {
   return {
     device: 'desktop',
   }
