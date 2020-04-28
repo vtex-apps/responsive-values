@@ -1,4 +1,7 @@
 # vtex.responsive-values
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-0-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 Utility for using props that accept different values for different devices.
 
@@ -80,3 +83,16 @@ const MyComponent = props => {
 ## API
 
 Props that use this hook accept either a value by itself, or an object with the following options: `phone` and `tablet` separately (or just `mobile` for both), and `desktop`. If there is any missing device, it will fallback to the next largest one. For example, if only the values of `phone` and `desktop` are passed, `tablet` devices will receive the value from `desktop`.
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
