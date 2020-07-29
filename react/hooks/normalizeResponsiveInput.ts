@@ -1,21 +1,21 @@
 /** The user is able to input `mobile` as a device (as opposed to `desktop`),
  * but the output will be converted to `phone` and `tablet` */
-type Device = 'mobile' | 'phone' | 'tablet' | 'desktop'
 
-const InputDevices: Record<Device, Device> = {
+type InputDevice = 'mobile' | 'phone' | 'tablet' | 'desktop'
+type OutputDevice = 'phone' | 'tablet' | 'desktop'
+
+const InputDevicesMap: Record<InputDevice, InputDevice> = {
   mobile: 'mobile',
   phone: 'phone',
   tablet: 'tablet',
   desktop: 'desktop',
 }
 
-type OutputDevices = 'phone' | 'tablet' | 'desktop'
-
-export type ResponsiveInput<T> = Record<keyof typeof InputDevices | string, T>
+export type ResponsiveInput<T> = Record<InputDevice | string, T>
 export type MaybeResponsiveInput<T> = T | ResponsiveInput<T>
 
 export type NormalizedInput<T> = {
-  devices: Record<OutputDevices, T>
+  devices: Record<OutputDevice, T>
   queries: Record<string, T>
 }
 
@@ -38,7 +38,7 @@ export const isResponsiveInput = <T>(value: any): value is ResponsiveInput<T> =>
       typeof value === 'object' &&
       Object.keys(value).every((key) => {
         return (
-          key in InputDevices ||
+          key in InputDevicesMap ||
           (key.charAt(0) === '(' && key.charAt(key.length - 1) === ')')
         )
       })
