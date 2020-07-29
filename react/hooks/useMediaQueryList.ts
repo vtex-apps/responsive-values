@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 
 const BreakpointMatchers: Record<string, MediaQueryList> = {}
 
@@ -6,30 +6,28 @@ export const useMediaQueryList = (queries: string[]) => {
   const [matches, setMatches] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {}
 
-    queries.forEach(
-      (query) =>
-        (initial[query] = Boolean(BreakpointMatchers?.[query]?.matches))
-    )
+    queries.forEach((query) => {
+      let mql = BreakpointMatchers[query]
+
+      if (!mql) {
+        // ugly side-effect（＞д＜）
+        mql = window.matchMedia(query)
+        BreakpointMatchers[query] = mql
+      }
+
+      initial[query] = Boolean(mql.matches)
+    })
 
     return initial
   })
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (typeof window?.matchMedia !== 'function' || queries.length === 0) {
       return
     }
 
     const cancels = queries.map((query) => {
       let mounted = true
-
-      if (!(query in BreakpointMatchers)) {
-        BreakpointMatchers[query] = window.matchMedia(query)
-        setMatches((curMatches) => ({
-          ...curMatches,
-          [query]: BreakpointMatchers[query].matches,
-        }))
-      }
-
       const mql = BreakpointMatchers[query]
 
       const listener = (e: MediaQueryListEvent) => {
