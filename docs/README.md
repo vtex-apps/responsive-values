@@ -1,9 +1,12 @@
 # vtex.responsive-values
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-0-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-Utility for using props that accept different values for different devices.
+Utility for using props that accept different values for different devices or media queries.
 
 For example, a given prop could accept both just a number...
 
@@ -13,13 +16,14 @@ props: {
 }
 ```
 
-...or different values depending on the device:
+...or different values depending on the device or a media query:
 
 ```js
 props: {
   quantity: {
     mobile: 1,
-    desktop: 2
+    desktop: 2,
+    '(min-width: 1500px)': 4,
   }
 }
 ```
@@ -38,6 +42,7 @@ const MyComponent = ({ quantity }) => {
 <MyComponent quantity={1} /> {/* always returns 1 */}
 
 <MyComponent quantity={{
+  '(min-width: 1500px)': 4,
   desktop: 2,
   mobile: 1,
 }} /> {/* returns 1 on mobile devices, 2 on desktop */}
@@ -47,16 +52,13 @@ Alternately, if you want to apply it to multiple values at once, or even the ent
 
 ```tsx
 import { useResponsiveValues } from 'vtex.responsive-values'
-import { pick } from 'ramda'
-
-interface Props {
-  margin: number,
-  padding: string
-}
 
 const MyComponent = props => {
   const { margin, padding } = useResponsiveValues(
-    pick(['margin', 'padding'], props)
+    {
+      margin: props.margin,
+      padding: props.padding
+    }
   )
 
   return (
@@ -80,9 +82,17 @@ const MyComponent = props => {
 /> {/* returns 1 on mobile devices, 2 on desktop */}
 ```
 
+There are some things to keep in mind when using media queries:
+
+- Media queries take precedence over devices. If one matches, any device-specific value is ignored.
+- Media queries are written following the [standard media query syntax](https://developer.mozilla.org/en-US/docs/Web/CSS/Media_Queries/Using_media_queries#Syntax).
+- The definiton order matters. If more than one media query is matched, the first matched one is used.
+
 ## API
 
-Props that use this hook accept either a value by itself, or an object with the following options: `phone` and `tablet` separately (or just `mobile` for both), and `desktop`. If there is any missing device, it will fallback to the next largest one. For example, if only the values of `phone` and `desktop` are passed, `tablet` devices will receive the value from `desktop`.
+Props that use this hook accept either a value by itself, or an object with the following options: `phone` and `tablet` separately (or just `mobile` for both), `desktop` and generic media queries.
+
+If there is any missing device, it will fallback to the next largest one. For example, if only the values of `phone` and `desktop` are passed, `tablet` devices will receive the value from `desktop`. Media queries have no fallback behavior.
 
 ## Contributors ✨
 
@@ -93,6 +103,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
