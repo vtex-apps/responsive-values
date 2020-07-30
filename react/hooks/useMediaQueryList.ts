@@ -2,7 +2,13 @@ import { useLayoutEffect, useState } from 'react'
 
 const BreakpointMatchers: Record<string, MediaQueryList> = {}
 
-export const useMediaQueryList = (queries: string[]) => {
+export function clearMatchersCache() {
+  Object.keys(BreakpointMatchers).forEach(
+    (key) => delete BreakpointMatchers[key]
+  )
+}
+
+export function useMediaQueryList(queries: string[]) {
   const [matches, setMatches] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {}
 
