@@ -13,51 +13,54 @@ export function useMediaQueryList(queries: string[]) {
     const initial: Record<string, boolean> = {}
 
     queries.forEach((query) => {
-      let mql = BreakpointMatchers[query]
+      let mediaQueryList = BreakpointMatchers[query]
 
-      if (!mql) {
-        // ugly side-effect（＞д＜）
-        mql = window.matchMedia(query)
-        BreakpointMatchers[query] = mql
+      if (!mediaQueryList) {
+        // ugly side-effect to get a up-to-date initial value（＞д＜）
+        mediaQueryList = window.matchMedia(query)
+        BreakpointMatchers[query] = mediaQueryList
       }
 
-      initial[query] = Boolean(mql.matches)
+      initial[query] = Boolean(mediaQueryList.matches)
     })
 
     return initial
   })
 
-  useLayoutEffect(() => {
-    if (typeof window?.matchMedia !== 'function' || queries.length === 0) {
-      return
-    }
-
-    const cancels = queries.map((query) => {
-      let mounted = true
-      const mql = BreakpointMatchers[query]
-
-      const listener = (e: MediaQueryListEvent) => {
-        if (!mounted) return
-        setMatches((curMatches) => ({ ...curMatches, [query]: e.matches }))
+  useLayoutEffect(
+    function updateQueryListeners() {
+      if (typeof window?.matchMedia !== 'function' || queries.length === 0) {
+        return
       }
 
-      mql.addListener(listener)
+      const cancels = queries.map((query) => {
+        let mounted = true
+        const mediaQueryList = BreakpointMatchers[query]
+
+        const listener = (e: MediaQueryListEvent) => {
+          if (!mounted) return
+          setMatches((curMatches) => ({ ...curMatches, [query]: e.matches }))
+        }
+
+        mediaQueryList.addListener(listener)
+
+        return () => {
+          mounted = false
+          mediaQueryList.removeListener(listener)
+        }
+      })
 
       return () => {
-        mounted = false
-        mql.removeListener(listener)
+        cancels.forEach((cancel) => cancel())
       }
-    })
-
-    return () => {
-      cancels.forEach((cancel) => cancel())
-    }
+    },
     // We disable this rule because it doesn't treat `JSON.stringify(queries)`
     // as an explicit dependency of `queries`.
     // We're also doing a JSON.stringify because we need to guarantee that it won't
     // re-run if the reference was changed but its content didn't.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [JSON.stringify(queries), setMatches])
+    [JSON.stringify(queries), setMatches]
+  )
 
   return {
     mediaQueries: Object.entries(matches),

@@ -5,7 +5,7 @@ import {
   clearMatchersCache,
   findFirstMatchingQuery,
 } from '../hooks/useMediaQueryList'
-import { mockMatchMedia } from './utils'
+import { mockMatchMedia } from '../testUtils/mockMatchMedia'
 
 type HookArgs = string[]
 type HookReturnType = ReturnType<typeof useMediaQueryList>

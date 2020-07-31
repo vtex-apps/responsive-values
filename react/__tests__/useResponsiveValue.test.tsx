@@ -5,7 +5,7 @@ import {
   useResponsiveValue,
   useResponsiveValues,
 } from '../hooks/useResponsiveValue'
-import { mockMatchMedia } from './utils'
+import { mockMatchMedia } from '../testUtils/mockMatchMedia'
 
 const devices = ['desktop', 'tablet', 'phone']
 
