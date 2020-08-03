@@ -21,5 +21,6 @@
     "@vtex/test-tools": "^3.1.0",
     "prop-types": "^15.7.2",
     "typescript": "3.8.3"
-  }
+  },
+  "version": "0.3.0"
 }
