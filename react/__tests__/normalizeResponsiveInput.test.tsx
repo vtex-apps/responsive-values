@@ -1,7 +1,7 @@
 import {
   isResponsiveInput,
   normalizeResponsiveInput,
-} from '../hooks/normalizeResponsiveInput'
+} from '../modules/normalizeResponsiveInput'
 
 jest.spyOn(console, 'warn').mockImplementation()
 
@@ -183,7 +183,7 @@ describe('responsiveValue', () => {
       })
     })
 
-    it('tablet fallbacks to mobile, ', () => {
+    it('tablet fallbacks to mobile,', () => {
       const value = {
         phone: 1,
         mobile: 2,

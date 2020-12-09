@@ -1,11 +1,9 @@
 import { renderHook } from '@testing-library/react-hooks'
 import { useDevice } from 'vtex.device-detector'
 
-import {
-  useResponsiveValue,
-  useResponsiveValues,
-} from '../hooks/useResponsiveValue'
 import { mockMatchMedia } from '../testUtils/mockMatchMedia'
+import useResponsiveValue from '../useResponsiveValue'
+import useResponsiveValues from '../useResponsiveValues'
 
 const devices = ['desktop', 'tablet', 'phone']
 
@@ -65,14 +63,14 @@ describe('useResponsiveValues', () => {
 
     const input = {
       first: { desktop: 1, mobile: 2 },
-      second: { desktop: 3, mobile: 4 },
+      second: { desktop: '3', mobile: '4' },
       third: { desktop: 1, '(max-width: 1000px)': 2 },
     }
 
     const { result } = renderHook(() => useResponsiveValues(input))
 
     expect(result.current.first).toBe(1)
-    expect(result.current.second).toBe(3)
+    expect(result.current.second).toBe('3')
     expect(result.current.third).toBe(2)
   })
 })
