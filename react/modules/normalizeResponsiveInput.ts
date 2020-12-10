@@ -1,8 +1,7 @@
 /** The user is able to input `mobile` as a device (as opposed to `desktop`),
  * but the output will be converted to `phone` and `tablet` */
 
-type InputDevice = 'mobile' | 'phone' | 'tablet' | 'desktop'
-type OutputDevice = 'phone' | 'tablet' | 'desktop'
+import type { InputDevice, OutputDevice } from '../ResponsiveValuesTypes'
 
 const InputDevicesMap: Record<InputDevice, InputDevice> = {
   mobile: 'mobile',
@@ -76,6 +75,10 @@ const showWarnings = <T>(value: ResponsiveInput<T>) => {
  * (i.e. either "prop: {mobile: 1, desktop:2}" or just "prop: 2")
  * and returns an object of the values broken down into devices
  * (i.e. {phone: 1, tablet: 1, desktop: 2})
+ *
+ * TODO: this can return undefined if only media queries are defined
+ * should we add undefined to the return type of our hooks?
+ * it would make it a bit annoying to use, but probably safer
  */
 export const normalizeResponsiveInput = <T>(
   input: MaybeResponsiveInput<T>
@@ -101,10 +104,12 @@ export const normalizeResponsiveInput = <T>(
   }
 }
 
-export const normalizeResponsiveInputs = <T>(
-  input: Record<string, MaybeResponsiveInput<T>>
+export const normalizeResponsiveInputs = <
+  Input extends Record<string, MaybeResponsiveInput<unknown>>
+>(
+  input: Input
 ) => {
-  const normalizedInputs: Array<[string, NormalizedInput<T>]> = []
+  const normalizedInputs: Array<[keyof Input, NormalizedInput<unknown>]> = []
   const queryList: Set<string> = new Set()
 
   Object.keys(input).forEach((key) => {
@@ -114,7 +119,7 @@ export const normalizeResponsiveInputs = <T>(
       queryList.add(query)
     )
 
-    normalizedInputs.push([key, normalizedInput])
+    normalizedInputs.push([key as keyof Input, normalizedInput])
   })
 
   return {
