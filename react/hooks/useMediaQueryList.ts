@@ -38,6 +38,13 @@ export function useMediaQueryList(queries: string[]) {
         let mounted = true
         const mediaQueryList = getBreakpointMatcher(query)
 
+        if (matches[query] === undefined || matches[query] === null) {
+          setMatches((curMatches) => ({
+            ...curMatches,
+            [query]: Boolean(mediaQueryList.matches),
+          }))
+        }
+
         const listener = (e: MediaQueryListEvent) => {
           if (!mounted) return
           setMatches((curMatches) => ({ ...curMatches, [query]: e.matches }))
