@@ -114,3 +114,27 @@ test('updates the matched list after a media listener is triggered', () => {
     ['(min-width: 1200px)', false],
   ])
 })
+
+test('returns an updated list of media queries after the hook params changes', () => {
+  const initialQueries: string[] = []
+
+  mockMatchMedia({
+    matchedQueries: ['(max-width: 800px)'],
+  })
+
+  const { result, rerender } = renderHook<HookArgs, HookReturnType>(
+    (hookArgs) => useMediaQueryList(hookArgs),
+    { initialProps: initialQueries }
+  )
+
+  expect(result.current.mediaQueries).toMatchObject([])
+
+  const rerenderQueries = ['(max-width: 600px)', '(max-width: 800px)']
+
+  rerender(rerenderQueries)
+
+  expect(result.current.mediaQueries).toMatchObject([
+    ['(max-width: 600px)', false],
+    ['(max-width: 800px)', true],
+  ])
+})
