@@ -8,20 +8,21 @@ export function clearMatchersCache() {
   )
 }
 
+function getBreakpointMatcher(query: string) {
+  if (!BreakpointMatchers[query]) {
+    // ugly side-effect to get a up-to-date initial value（＞д＜）
+    BreakpointMatchers[query] = window.matchMedia(query)
+  }
+
+  return BreakpointMatchers[query]
+}
+
 export function useMediaQueryList(queries: string[]) {
   const [matches, setMatches] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {}
 
     queries.forEach((query) => {
-      let mediaQueryList = BreakpointMatchers[query]
-
-      if (!mediaQueryList) {
-        // ugly side-effect to get a up-to-date initial value（＞д＜）
-        mediaQueryList = window.matchMedia(query)
-        BreakpointMatchers[query] = mediaQueryList
-      }
-
-      initial[query] = Boolean(mediaQueryList.matches)
+      initial[query] = Boolean(getBreakpointMatcher(query).matches)
     })
 
     return initial
@@ -35,7 +36,14 @@ export function useMediaQueryList(queries: string[]) {
 
       const cancels = queries.map((query) => {
         let mounted = true
-        const mediaQueryList = BreakpointMatchers[query]
+        const mediaQueryList = getBreakpointMatcher(query)
+
+        if (matches[query] === undefined || matches[query] === null) {
+          setMatches((curMatches) => ({
+            ...curMatches,
+            [query]: Boolean(mediaQueryList.matches),
+          }))
+        }
 
         const listener = (e: MediaQueryListEvent) => {
           if (!mounted) return
