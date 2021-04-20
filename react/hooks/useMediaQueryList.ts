@@ -8,8 +8,8 @@ export function clearMatchersCache() {
   )
 }
 
-function getBreakpointMatcher(query: string) {
-  if (!BreakpointMatchers[query]) {
+function getBreakpointMatcher(query: string): MediaQueryList | undefined {
+  if (!BreakpointMatchers[query] && typeof window?.matchMedia === 'function') {
     // ugly side-effect to get a up-to-date initial value（＞д＜）
     BreakpointMatchers[query] = window.matchMedia(query)
   }
@@ -22,7 +22,7 @@ export function useMediaQueryList(queries: string[]) {
     const initial: Record<string, boolean> = {}
 
     queries.forEach((query) => {
-      initial[query] = Boolean(getBreakpointMatcher(query).matches)
+      initial[query] = Boolean(getBreakpointMatcher(query)?.matches)
     })
 
     return initial
@@ -41,7 +41,7 @@ export function useMediaQueryList(queries: string[]) {
         if (matches[query] === undefined || matches[query] === null) {
           setMatches((curMatches) => ({
             ...curMatches,
-            [query]: Boolean(mediaQueryList.matches),
+            [query]: Boolean(mediaQueryList?.matches),
           }))
         }
 
@@ -50,11 +50,11 @@ export function useMediaQueryList(queries: string[]) {
           setMatches((curMatches) => ({ ...curMatches, [query]: e.matches }))
         }
 
-        mediaQueryList.addListener(listener)
+        mediaQueryList?.addListener(listener)
 
         return () => {
           mounted = false
-          mediaQueryList.removeListener(listener)
+          mediaQueryList?.removeListener(listener)
         }
       })
 
